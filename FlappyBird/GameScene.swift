@@ -22,6 +22,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // スコア用
     var score = 0
+    let userDefaults:UserDefaults = UserDefaults.standard
     
     // SKView上にシーンが表示されたときに呼ばれるメソッド
     override func didMove(to view: SKView) {
@@ -283,6 +284,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             // スコア用の物体と衝突した
             print("ScoreUp")
             score += 1
+            
+            // ベストスコア更新か確認する
+            var bestScore = userDefaults.integer(forKey: "BEST")
+            if score > bestScore {
+                bestScore = score
+                userDefaults.set(bestScore, forKey: "BEST")
+                userDefaults.synchronize()
+            }
+            
         } else {
             // 壁か地面と衝突した
             print("GameOver")
